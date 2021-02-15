@@ -13,25 +13,37 @@
       </form>
     </div>
     <div class="right_container">
-      <div class="not_found" v-if="!searchResult">
-        <h3>City not found</h3>
-      </div>
-      <header class="localisation-info" v-if="searchResult">
-        <h1>{{ weather.cityName }}</h1>
-        <p class="country">{{ weather.country }}</p>
-      </header>
-      <section class="details" v-if="searchResult">
-        <h2 class="temp">Température estimée à: {{ weather.temperature }}°C</h2>
-        <div class="more_details">
-          <p class="temp_max">Temperature maximum: {{ weather.lowTemp }}°C</p>
-          <p class="temp_min">Temperature minimum: {{ weather.highTemp }}°C</p>
-          <p class="humidity">Le taux d'humidité: {{ weather.humidity }}%</p>
+      <transition name="switch" mode="out-in">
+        <div v-if="searchResult">
+          <header class="localisation-info" v-if="searchResult">
+            <h1>{{ weather.cityName }}</h1>
+            <p class="country">{{ weather.country }}</p>
+          </header>
+          <section class="details" v-if="searchResult">
+            <h2 class="temp">
+              Température estimée à: {{ weather.temperature }}°C
+            </h2>
+            <div class="more_details">
+              <p class="temp_max">
+                Temperature maximum: {{ weather.lowTemp }}°C
+              </p>
+              <p class="temp_min">
+                Temperature minimum: {{ weather.highTemp }}°C
+              </p>
+              <p class="humidity">
+                Le taux d'humidité: {{ weather.humidity }}%
+              </p>
+            </div>
+          </section>
+          <footer v-if="searchResult">
+            <p>{{ weather.description }}</p>
+            <p class="feels_like">Resentie: {{ weather.feelsLike }}°C</p>
+          </footer>
         </div>
-      </section>
-      <footer v-if="searchResult">
-        <p>{{ weather.description }}</p>
-        <p class="feels_like">Resentie: {{ weather.feelsLike }}°C</p>
-      </footer>
+        <div v-else>
+          <h3>City not found</h3>
+        </div>
+      </transition>
     </div>
   </main>
 </template>
@@ -62,7 +74,7 @@ export default {
     getWeather: async function() {
       console.log(this.citySearch);
       const key = "69b47498249a5304a0dac0017a13d253";
-      const callURL = `http://api.openweathermap.org/data/2.5/weather?q=${this.citySearch}&appid=${key}&units=metric `;
+      const callURL = `https://api.openweathermap.org/data/2.5/weather?q=${this.citySearch}&appid=${key}&units=metric `;
 
       //? Appel à l'API avec await dans un try
       try {
@@ -177,5 +189,19 @@ main {
 .night {
   background-image: url(./assets/pexels-neale-lasalle-631477.jpg);
   color: white;
+}
+
+/* Switch */
+.switch-enter-from,
+.switch-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.switch-enter-active {
+  transition: all 1s ease;
+}
+.switch-leave-active {
+  transition: all 1s ease;
+  widows: 100%;
 }
 </style>
