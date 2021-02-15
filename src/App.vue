@@ -27,7 +27,7 @@
       </section>
       <footer v-if="searchResult">
         <p>{{ weather.description }}</p>
-        <p class="feels_like">{{ weather.feelsLike }}</p>
+        <p class="feels_like">Resentie: {{ weather.feelsLike }}°C</p>
       </footer>
     </div>
   </main>
@@ -39,7 +39,7 @@ export default {
   components: {},
   data() {
     return {
-      isDay: true,
+      isDay: false,
       searchResult: false,
       citySearch: "",
       weather: {
